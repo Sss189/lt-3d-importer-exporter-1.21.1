@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="lt3dimporter"
+version="${mod_version}"
+displayName="LT 3D Importer & Exporter"
+authors="Timardo; 1.21.1 port contributors"
+description='''Import OBJ models as LittleTiles blueprints and export blueprints with baked geometry and textures.'''
+
+[[dependencies.lt3dimporter]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.lt3dimporter]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.lt3dimporter]]
+modId="littletiles"
+type="required"
+versionRange="[1.6.0-pre233,)"
+ordering="AFTER"
+side="CLIENT"
+
+[[dependencies.lt3dimporter]]
+modId="creativecore"
+type="required"
+versionRange="[2.13.50,)"
+ordering="AFTER"
+side="CLIENT"

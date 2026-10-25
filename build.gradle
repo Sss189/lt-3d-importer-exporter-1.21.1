@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+group = 'net.timardo.lt3dimporter'
+version = project.mod_version
+base { archivesName = 'lt3dimporter-neoforge-1.21.1' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories { mavenCentral() }
+neoForge {
+    version = project.neo_version
+    runs {
+        client {
+            client()
+            jvmArgument '-Xmx4G'
+            if (project.hasProperty('smoke')) systemProperty 'lt3d.smoke', 'true'
+            if (project.hasProperty('packaged')) loadedMods = []
+        }
+        configureEach {
+            gameDirectory = project.file('run')
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+    mods { lt3dimporter { sourceSet(sourceSets.main) } }
+}
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
+}
+dependencies {
+    compileOnly fileTree(dir: 'libs', include: ['CreativeCore*.jar', 'LittleTiles*.jar'])
+    localRuntime fileTree(dir: 'libs', include: ['CreativeCore*.jar', 'LittleTiles*.jar'])
+    jarJar(implementation('de.javagl:obj')) {
+        version { strictly '[0.4.0]'; prefer '0.4.0' }
+    }
+    if (!project.hasProperty('packaged')) additionalRuntimeClasspath 'de.javagl:obj:0.4.0'
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.named('test', Test) { useJUnitPlatform() }
+tasks.named('processResources', ProcessResources) {
+    inputs.property('mod_version', project.mod_version)
+    filesMatching('META-INF/neoforge.mods.toml') { expand(mod_version: project.mod_version) }
+}
+// Libraries are embedded through NeoForge Jar-in-Jar so other mods can share them.
+tasks.named('jar', Jar) {
+    from('LICENSE')
+    from('THIRD-PARTY-NOTICES.md')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

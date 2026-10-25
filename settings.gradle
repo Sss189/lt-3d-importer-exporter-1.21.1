@@ -1,0 +1,2 @@
+pluginManagement { repositories { gradlePluginPortal() } }
+rootProject.name = 'lt-3d-importer-exporter'

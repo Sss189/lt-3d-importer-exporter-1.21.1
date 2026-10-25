@@ -1,0 +1,12 @@
+.gradle/
+.gradle-user/
+build/
+run/
+libs/*.jar
+.idea/
+*.iml
+dist/
+upstream/
+upstream-*.zip
+*.log
+__pycache__/
